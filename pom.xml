@@ -7,12 +7,12 @@
   <parent>
     <groupId>de.awtools</groupId>
     <artifactId>awtools-maven-pom</artifactId>
-    <version>26</version>
+    <version>27</version>
   </parent>
 
   <artifactId>awtools-config</artifactId>
   <packaging>jar</packaging>
-  <version>1.3</version>
+  <version>1.4-SNAPSHOT</version>
 
   <name>AWTools for Configuration Management</name>
   <description>
@@ -52,17 +52,17 @@
             </manifest>
             <manifestEntries>
               <mode>development</mode>
-              <url>${pom.url}</url>
+              <url>${project.url}</url>
               <Specification-Title>
-                ${pom.groupId}-${pom.artifactId}# Specification
+                ${project.groupId}-${project.artifactId}# Specification
               </Specification-Title>
-              <Specification-Version>${pom.version}</Specification-Version>
-              <Specification-Vendor>${pom.url}</Specification-Vendor>
+              <Specification-Version>${project.version}</Specification-Version>
+              <Specification-Vendor>${project.url}</Specification-Vendor>
               <Implementation-Title>
-                ${pom.groupId}-${pom.artifactId}# Implementation
+                ${project.groupId}-${project.artifactId}# Implementation
               </Implementation-Title>
-              <Implementation-Version>${pom.version}</Implementation-Version>
-              <Implementation-Vendor>${pom.url}</Implementation-Vendor>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>${project.url}</Implementation-Vendor>
             </manifestEntries>
             <!--
                  Some problems with Maven jar plugin and Eclipse
