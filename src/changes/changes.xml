@@ -7,6 +7,9 @@
   <body>
     <release version="awtools-config-1.4" date="2016-02-02"
       description="Some Updates">
+      <action dev="andrewinkler" type="update" date="2016-06-22">
+        PropertyHolder with one argument constructor (Property file name).
+      </action>
       <action dev="andrewinkler" type="update" date="2016-02-02">
         Update to Java 8. Migration from Sourceforge to Github.
       </action>

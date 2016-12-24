@@ -1,25 +1,24 @@
 /*
- * $Id: PropertyHolder.java 2319 2010-07-30 13:46:58Z andrewinkler $
  * ============================================================================
- * Project awtools-config
- * Copyright (c) 2000-2010 by Andre Winkler. All rights reserved.
+ * Project awtools-config Copyright (c) 2000-2016 by Andre Winkler. All rights
+ * reserved.
  * ============================================================================
- *          GNU LESSER GENERAL PUBLIC LICENSE
- *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ * GNU LESSER GENERAL PUBLIC LICENSE TERMS AND CONDITIONS FOR COPYING,
+ * DISTRIBUTION AND MODIFICATION
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
 
@@ -35,26 +34,25 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
 /**
- * Verwaltet die Benutzerzeigenschaften. Die Eigenschaften ermitteln sich
- * aus 3 Informationsquellen:
+ * Verwaltet die Benutzerzeigenschaften. Die Eigenschaften ermitteln sich aus 3
+ * Informationsquellen:
  * <ul>
- *   <li>Laden aus dem Klassenpfad.</li>
- *   <li>Laden aus dem Benutzerverzeichnis.</li>
- *   <li>Laden aus den Systemeinstellungen.</li>
+ * <li>Laden aus dem Klassenpfad.</li>
+ * <li>Laden aus dem Benutzerverzeichnis.</li>
+ * <li>Laden aus den Systemeinstellungen.</li>
  * </ul>
  * Die dateibasierten Quellen kann ein Dateiname angegeben werden.
  *
- * @version $LastChangedRevision: 2319 $ $LastChangedDate: 2010-07-30 15:46:58 +0200 (Fr, 30 Jul 2010) $
- * @author by Andre Winkler, $LastChangedBy: andrewinkler $
+ * @author by Andre Winkler
  */
 public final class PropertyHolder implements GlueConfig {
 
     /** Der Logger der Klasse. */
-    private final Logger log = org.slf4j.LoggerFactory.getLogger(PropertyHolder.class);
+    private final Logger log = org.slf4j.LoggerFactory
+            .getLogger(PropertyHolder.class);
 
     /** Die Eigenschaften aus <code>java.lang.System</code>. */
     private GlueConfig systemProperties;
@@ -71,50 +69,62 @@ public final class PropertyHolder implements GlueConfig {
     /**
      * Konstruktor.
      *
-     * @param _userHomeFileName Der Name der Eigenschaftendatei, die in
-     *     <b>USER_HOME</b> zu finden ist.
-     * @param _classpathFileName Der Name der Eigenschaftendatei, die im
-     *     <b>CLASSPATH</b> zu finden ist.
+     * @param _userHomeFileName
+     *            Der Name der Eigenschaftendatei, die in <b>USER_HOME</b> zu
+     *            finden ist.
      */
-    public PropertyHolder(final String _userHomeFileName,
-            final String _classpathFileName) {
+    public PropertyHolder(final String _userHomeFileName) {
+        this(_userHomeFileName, null, PropertyHolder.class);
+    }
 
+    /**
+     * Konstruktor.
+     *
+     * @param _userHomeFileName
+     *            Der Name der Eigenschaftendatei, die in <b>USER_HOME</b> zu
+     *            finden ist.
+     * @param _classpathFileName
+     *            Der Name der Eigenschaftendatei, die im <b>CLASSPATH</b> zu
+     *            finden ist.
+     */
+    public PropertyHolder(String _userHomeFileName, String _classpathFileName) {
         this(_userHomeFileName, _classpathFileName, PropertyHolder.class);
     }
 
     /**
      * Konstruktor.
      *
-     * @param _userHomeFileName Der Name der Eigenschaftendatei, die in
-     *     <b>USER_HOME</b> zu finden ist.
-     * @param _classpathFileName Der Name der Eigenschaftendatei, die im
-     *     <b>CLASSPATH</b> zu finden ist.
-     * @param _classLoader Der Classloader dieser Klasser verwenden.
+     * @param _userHomeFileName
+     *            Der Name der Eigenschaftendatei, die in <b>USER_HOME</b> zu
+     *            finden ist.
+     * @param _classpathFileName
+     *            Der Name der Eigenschaftendatei, die im <b>CLASSPATH</b> zu
+     *            finden ist.
+     * @param _classLoader
+     *            Der Classloader dieser Klasser verwenden.
      */
-    public PropertyHolder(final String _userHomeFileName,
-            final String _classpathFileName, final Class<?> _classLoader) {
-
-        Validate.isTrue(StringUtils.isNotBlank(_userHomeFileName));
-        Validate.isTrue(StringUtils.isNotBlank(_classpathFileName));
-        Validate.notNull(_classLoader);
+    public PropertyHolder(String _userHomeFileName, String _classpathFileName,
+            Class<?> _classLoader) {
 
         userHomeFileName = _userHomeFileName;
         classpathFileName = _classpathFileName;
         classLoader = _classLoader;
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#load()
-     */
     public void load() {
-        loadClasspath();
-        loadHomepath();
+        if (classLoader != null && StringUtils.isNotEmpty(classpathFileName)) {
+            loadClasspath();
+        }
+        if (userHomeFileName != null) {
+            loadHomepath();
+        }
 
         properties = new CombinedGlueConfig();
         systemProperties = new SystemGlueConfig();
         properties.addConfig(systemProperties);
         properties.addConfig(userHomeProperties);
         properties.addConfig(classpathProperties);
+
         try {
             properties.load();
         } catch (IOException ex) {
@@ -132,19 +142,19 @@ public final class PropertyHolder implements GlueConfig {
      */
     private void loadHomepath() {
         if (log.isDebugEnabled()) {
-            log.debug("Load homepath resource '" + getUserHomeFileName() + "'.");
+            log.debug(
+                    "Load homepath resource [" + getUserHomeFileName() + "].");
         }
 
         try {
-            File userHomePropertyFile =
-                    new File(SystemUtils.USER_HOME, getUserHomeFileName());
+            File userHomePropertyFile = new File(SystemUtils.USER_HOME,
+                    getUserHomeFileName());
             if (!userHomePropertyFile.exists()) {
                 userHomePropertyFile.createNewFile();
             }
 
-            userHomeProperties =
-                    new PropertiesGlueConfig(userHomePropertyFile.toURI()
-                        .toURL());
+            userHomeProperties = new PropertiesGlueConfig(
+                    userHomePropertyFile.toURI().toURL());
         } catch (MalformedURLException ex) {
             log.debug("MalformedURLException", ex);
             throw new IllegalStateException(ex);
@@ -173,33 +183,44 @@ public final class PropertyHolder implements GlueConfig {
     /**
      * Schreibt Debug-Informationen.
      *
-     * @param configName Der Name der Konfiguration.
-     * @param config Eine Konfiguration.
+     * @param configName
+     *            Der Name der Konfiguration.
+     * @param config
+     *            Eine Konfiguration.
      */
     private void writeDebugInfos(final String configName,
-        final GlueConfig config) {
+            final GlueConfig config) {
 
         StringBuilder sb = new StringBuilder(configName);
         sb.append(IOUtils.LINE_SEPARATOR).append(config.debugOutput());
         log.debug(sb.toString());
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#save()
      */
     public void save() throws IOException {
         userHomeProperties.save();
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getProperty(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * de.gluehloch.util.configuration.TestXyz#getProperty(java.lang.String)
      */
     public Object getProperty(final String key) {
         return properties.getProperty(key);
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getProperty(java.lang.String, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * de.gluehloch.util.configuration.TestXyz#getProperty(java.lang.String,
+     * java.lang.Object)
      */
     public Object getProperty(final String key, final Object defaultValue) {
         Object value = properties.getProperty(key);
@@ -209,79 +230,108 @@ public final class PropertyHolder implements GlueConfig {
         return value;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getBool(java.lang.String)
      */
     public boolean getBool(final String key) {
         return properties.getBool(key);
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getBool(java.lang.String, boolean)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.gluehloch.util.configuration.TestXyz#getBool(java.lang.String,
+     * boolean)
      */
     public boolean getBool(final String key, final boolean defaultValue) {
         return properties.getBool(key, defaultValue);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getString(java.lang.String)
      */
     public String getString(final String key) {
         return properties.getString(key);
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getString(java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.gluehloch.util.configuration.TestXyz#getString(java.lang.String,
+     * java.lang.String)
      */
     public String getString(final String key, final String defaultValue) {
         return properties.getString(key, defaultValue);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getInt(java.lang.String)
      */
     public int getInt(final String key) {
         return properties.getInt(key);
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getInt(java.lang.String, int)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.gluehloch.util.configuration.TestXyz#getInt(java.lang.String,
+     * int)
      */
     public int getInt(final String key, final int defaultValue) {
         return properties.getInt(key, defaultValue);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getLong(java.lang.String)
      */
     public long getLong(final String key) {
         return properties.getLong(key);
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getLong(java.lang.String, long)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.gluehloch.util.configuration.TestXyz#getLong(java.lang.String,
+     * long)
      */
     public long getLong(final String key, final long defaultValue) {
         return properties.getLong(key, defaultValue);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getFile(java.lang.String)
      */
     public File getFile(final String key) {
         return new File(properties.getString(key));
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#getFile(java.lang.String, java.io.File)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.gluehloch.util.configuration.TestXyz#getFile(java.lang.String,
+     * java.io.File)
      */
     public File getFile(final String key, final File defaultValue) {
-        return new File(properties.getString(key,
-            defaultValue.getAbsolutePath()));
+        return new File(
+                properties.getString(key, defaultValue.getAbsolutePath()));
     }
 
-    /* (non-Javadoc)
-     * @see de.gluehloch.util.configuration.TestXyz#setProperty(java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * de.gluehloch.util.configuration.TestXyz#setProperty(java.lang.String,
+     * java.lang.String)
      */
     public void setProperty(final String key, final String value) {
         userHomeProperties.setProperty(key, value);
@@ -292,7 +342,9 @@ public final class PropertyHolder implements GlueConfig {
     /** Der Name der Datei im Benutzerverzeichnis. */
     private final String userHomeFileName;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getUserHomeFileName()
      */
     public String getUserHomeFileName() {
@@ -307,7 +359,9 @@ public final class PropertyHolder implements GlueConfig {
     /** Der zu verwendende ClassLoader. */
     private final Class<?> classLoader;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see de.gluehloch.util.configuration.TestXyz#getClasspathFileName()
      */
     public String getClasspathFileName() {

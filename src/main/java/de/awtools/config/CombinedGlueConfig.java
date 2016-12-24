@@ -1,25 +1,24 @@
 /*
- * $Id: CombinedGlueConfig.java 3054 2011-12-19 17:51:55Z andrewinkler $
  * ============================================================================
- * Project awtools-config
- * Copyright (c) 2004-2010 by Andre Winkler. All rights reserved.
+ * Project awtools-config Copyright (c) 2004-2016 by Andre Winkler. All rights
+ * reserved.
  * ============================================================================
- *          GNU LESSER GENERAL PUBLIC LICENSE
- *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ * GNU LESSER GENERAL PUBLIC LICENSE TERMS AND CONDITIONS FOR COPYING,
+ * DISTRIBUTION AND MODIFICATION
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
 
@@ -34,29 +33,29 @@ import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Verwaltet mehrere {@link GlueConfig}s. Eine Konfiguration überschreibt
- * ggf. die Eigenschaften der nachfolgenden Konfiguration.
+ * Verwaltet mehrere {@link GlueConfig}s. Eine Konfiguration überschreibt ggf.
+ * die Eigenschaften der nachfolgenden Konfiguration.
  * 
- * @author  $Author: andrewinkler $
- * @version $Revision: 3054 $ $Date: 2011-12-19 18:51:55 +0100 (Mo, 19 Dez 2011) $
+ * @author Andre Winkler
  */
 public final class CombinedGlueConfig extends AbstractGlueConfig {
 
     /**
-     * Die Liste der verwalteten Konfigurationen. Die Reihenfolge definiert
-     * eine Ordnung über die Konfigurationen. Auf der Suche nach einer
-     * Eigenschaft wird mit der Konfiguration an Index 0 begonnen. Ist diese
-     * Eigenschaft nicht definiert, wird die Suche mit der Konfiguration an
-     * Stelle 1 fortgeführt usw.<br>
-     * Die Konfiguration an Position 0 wird für das Ändern und die Neuanlage
-     * von Eigenschaften verwendet.
+     * Die Liste der verwalteten Konfigurationen. Die Reihenfolge definiert eine
+     * Ordnung über die Konfigurationen. Auf der Suche nach einer Eigenschaft
+     * wird mit der Konfiguration an Index 0 begonnen. Ist diese Eigenschaft
+     * nicht definiert, wird die Suche mit der Konfiguration an Stelle 1
+     * fortgeführt usw.<br>
+     * Die Konfiguration an Position 0 wird für das Ändern und die Neuanlage von
+     * Eigenschaften verwendet.
      */
-    private final List<GlueConfig> configs = new LinkedList<GlueConfig>();
+    private final List<GlueConfig> configs = new LinkedList<>();
 
     /**
      * Eine weitere Konfiguration hinzufügen.
      *
-     * @param config Eine Konfiguration.
+     * @param config
+     *            Eine Konfiguration.
      *
      * @see #configs
      */
@@ -85,8 +84,10 @@ public final class CombinedGlueConfig extends AbstractGlueConfig {
      * Modifikationen oder Neuanlagen von Eigenschaften werden in die erste
      * Konfiguration geschrieben.
      *
-     * @param key Der Schlüssel.
-     * @param value Wert der Eigenschaft.
+     * @param key
+     *            Der Schlüssel.
+     * @param value
+     *            Wert der Eigenschaft.
      */
     public void setProperty(final String key, final String value) {
         if (configs.size() == 0) {
@@ -100,8 +101,9 @@ public final class CombinedGlueConfig extends AbstractGlueConfig {
      * Verwaltet den internen Zugang zu der Eigenschaft
      * {@link CombinedGlueConfig#configs}.
      * 
-     * @param key Der Schlüssel.
-     * @return Die gefundene Eigenschaft 
+     * @param key
+     *            Der Schlüssel.
+     * @return Die gefundene Eigenschaft
      */
     @Override
     protected Object doGetProperty(final String key) {
@@ -111,15 +113,15 @@ public final class CombinedGlueConfig extends AbstractGlueConfig {
             if (StringUtils.isNotBlank(value)) {
                 result = value;
                 break;
-            }   
+            }
         }
         return result;
     }
 
     @SuppressWarnings("unchecked")
-	public Iterator<String> getKeyIterator() {
+    public Iterator<String> getKeyIterator() {
         @SuppressWarnings("rawtypes")
-		Iterator[] iterators = new Iterator[configs.size()];
+        Iterator[] iterators = new Iterator[configs.size()];
         int index = 0;
         for (GlueConfig gc : configs) {
             iterators[index] = gc.getKeyIterator();
