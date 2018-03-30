@@ -38,14 +38,13 @@ import java.util.Properties;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Eine Konfiguration die im Hintergrund ein {@link Properties} Objekt
  * verwendet.
  * 
- * @author  $Author: andrewinkler $
- * @version $Revision: 2319 $ $Date: 2010-07-30 15:46:58 +0200 (Fr, 30 Jul 2010) $
+ * @author Andre Winkler
  */
 public final class PropertiesGlueConfig extends AbstractGlueConfig {
 

@@ -32,15 +32,14 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Utility Klasse für {@link GlueConfig} Implementierungen.
  * 
- * @author  $Author: andrewinkler $
- * @version $Revision: 2319 $ $Date: 2010-07-30 15:46:58 +0200 (Fr, 30 Jul 2010) $
+ * @author Andre Winkler
  */
 abstract class AbstractGlueConfig implements GlueConfig {
 

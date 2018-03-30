@@ -32,8 +32,8 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 
 /**

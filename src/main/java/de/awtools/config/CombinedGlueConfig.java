@@ -30,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Verwaltet mehrere {@link GlueConfig}s. Eine Konfiguration überschreibt ggf.
